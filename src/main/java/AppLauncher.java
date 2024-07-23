@@ -1,4 +1,5 @@
 import BanksRequests.MyBot;
+import WelcomeMessage.WelcomeMessage;
 import org.springframework.boot.SpringApplication;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -11,6 +12,7 @@ public class AppLauncher {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             MyBot telegramBot = new MyBot();
             botsApi.registerBot(telegramBot);
+            botsApi.registerBot(new WelcomeMessage());
         } catch (TelegramApiException e) {
             System.out.println(e.getMessage());
         }
