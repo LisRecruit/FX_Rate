@@ -14,9 +14,9 @@ public class MyBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         String chatId = update.getMessage().getChatId().toString();
         System.out.println("Get message " + update.getMessage().getText());
-        if(update.getMessage().getText().equals("/start")) {
-            sendMessage(chatId, "Get message");
-        }
+//        if(update.getMessage().getText().equals("/start")) {
+//            sendMessage(chatId, "Get message");
+//        }
         GettingExchangeRates bankRates = new GettingExchangeRates();
         String bank = update.getMessage().getText();
         try {
