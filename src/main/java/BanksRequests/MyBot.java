@@ -1,77 +1,39 @@
 package BanksRequests;
 
-import com.google.gson.*;
+import Buttons.GetInformation;
+import Buttons.SettingsButton;
+import Buttons.WelcomeMessage;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Component
 public class MyBot extends TelegramLongPollingBot {
+    private final WelcomeMessage welcomeMessage = new WelcomeMessage();
+    private final GetInformation getInformation = new GetInformation();
+    private final SettingsButton settingsButton = new SettingsButton();
+
     @Override
     public void onUpdateReceived(Update update) {
-        String chatId = update.getMessage().getChatId().toString();
-
-        System.out.println("Get message " + update.getMessage().getText());
-        String userComand = update.getMessage().getText();
-        switch (userComand){
-            case "/start":{
-                sendMessage(chatId, "Вітаю у курсах від котика");
-                break;
+        long chatId = update.getMessage().getChatId();
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            String messageText = update.getMessage().getText();
+//            long chatId = update.getMessage().getChatId();
+            if ("/start".equals(messageText)) {
+                welcomeMessage.sendWelcomeMessage(chatId, this);
             }
-            case "/test":{
-                sendMessage(chatId, "це тестове повідомлення");
-
-            }
-            case "/testButtons":{
-                SendMessage response = new SendMessage(chatId,"Menu");
-                ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-                List<KeyboardRow> keyboard = new ArrayList<>();
-
-                KeyboardRow row1 = new KeyboardRow();
-                row1.add(new KeyboardButton("курс приват"));
-                row1.add(new KeyboardButton("row 1, button2"));
-                keyboard.add(row1);
-
-                KeyboardRow row2 = new KeyboardRow();
-                row2.add(new KeyboardButton("row 2, button1 and only 1"));
-                keyboard.add(row2);
-
-                // Установка клавиатуры к сообщению
-                keyboardMarkup.setKeyboard(keyboard);
-                response.setReplyMarkup(keyboardMarkup);
-
-                try {
-                    execute(response); // Отправка сообщения
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            case "курс приват": {
-                GettingExchangeRates getRate = new GettingExchangeRates();
-                try {
-                    getRate.getExchangeRates("/privat24");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
-
+        } else if (update.hasCallbackQuery()) {
+            handleCallbackQuery(update.getCallbackQuery());
         }
-
-
 
         GettingExchangeRates bankRates = new GettingExchangeRates();
         String bank = update.getMessage().getText();
@@ -79,6 +41,84 @@ public class MyBot extends TelegramLongPollingBot {
             String message = bankRates.getExchangeRates(bank);
             sendMessage(chatId, message);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleCallbackQuery(CallbackQuery callbackQuery) {
+        String callbackData = callbackQuery.getData();
+        long chatId = callbackQuery.getMessage().getChatId();
+
+        switch (callbackData) {
+            case "info":
+                getInformation.sendInformation(chatId, this);
+                break;
+            case "settings menu":
+                settingsButton.sendSettingsMenu(chatId, this);
+                break;
+            case "setting_1":
+                // Обработка для настройки 1
+                handleSetting1(chatId);
+                break;
+            case "setting_2":
+                // Обработка для настройки 2
+                handleSetting2(chatId);
+                break;
+            case "setting_3":
+                // Обработка для настройки 3
+                handleSetting3(chatId);
+                break;
+            case "setting_4":
+                // Обработка для настройки 4
+                handleSetting4(chatId);
+                break;
+        }
+    }
+
+    private void handleSetting1(long chatId) {
+        // Логика для настройки 1
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Setting 1 is now configured.");
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleSetting2(long chatId) {
+        // Логика для настройки 2
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Setting 2 is now configured.");
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleSetting3(long chatId) {
+        // Логика для настройки 3
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Setting 3 is now configured.");
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleSetting4(long chatId) {
+        // Логика для настройки 4
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Setting 4 is now configured.");
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
@@ -93,7 +133,7 @@ public class MyBot extends TelegramLongPollingBot {
         return "6792941997:AAGEJjcgCzy-C-X6hA56ORT74LAvQGNMkiI";
     }
 
-    public void sendMessage(String chatId, String text) {
+    public void sendMessage(long chatId, String text) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
@@ -103,10 +143,4 @@ public class MyBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
-
-
-
-
-
 }
