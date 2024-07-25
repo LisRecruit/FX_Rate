@@ -7,11 +7,16 @@ import java.time.LocalTime;
 
 public class User {
 
-    String bank = "/nbu";
-    int digitsAfterComs = 2;
-    String currency = "USD";
-    boolean enableNotifications = false;
-    LocalTime specificTime = LocalTime.of(9, 0);
+    public User (long chatId) {
+        this.chatId=chatId;
+    }
+
+    private final long chatId;
+    private String bank = "/nbu";
+    private int digitsAfterComs = 2;
+    private String currency = "USD";
+    private boolean enableNotifications = false;
+    private LocalTime specificTime = LocalTime.of(9, 0);
 
     public String getBank() {
         return bank;
@@ -34,6 +39,36 @@ public class User {
     }
 
 
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
 
+    public void setDigitsAfterComs(int digitsAfterComs) {
+        this.digitsAfterComs = digitsAfterComs;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public long getChatId() {
+        return chatId;
+    }
+
+    public void setEnableNotifications(boolean enableNotifications) {
+        this.enableNotifications = enableNotifications;
+    }
+
+    public void setSpecificTime(LocalTime specificTime) {
+        this.specificTime = specificTime;
+    }
+
+    public void switchNotification (){
+        if (this.isEnableNotifications()==true){
+            this.setEnableNotifications(false);
+        } else {
+            this.setEnableNotifications(true);
+        }
+    }
 }
 
