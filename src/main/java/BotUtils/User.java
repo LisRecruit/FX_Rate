@@ -34,6 +34,32 @@ public class User {
     }
 
 
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
 
+    public void setDigitsAfterComs(int digitsAfterComs) {
+        this.digitsAfterComs = digitsAfterComs;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public void setEnableNotifications(boolean enableNotifications) {
+        this.enableNotifications = enableNotifications;
+    }
+
+    public void setSpecificTime(LocalTime specificTime) {
+        this.specificTime = specificTime;
+    }
+
+    public void switchNotification (){
+        if (this.isEnableNotifications()==true){
+            this.setEnableNotifications(false);
+        } else {
+            this.setEnableNotifications(true);
+        }
+    }
 }
 
