@@ -1,9 +1,7 @@
 package BanksRequests;
 
 
-import Buttons.GetInformation;
-import Buttons.SettingsButton;
-import Buttons.WelcomeMessage;
+import Buttons.AllButtons;
 
 import Jsons.GettingExchangeRates;
 
@@ -23,24 +21,23 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Component
 public class MyBot extends TelegramLongPollingBot {
-    private final WelcomeMessage welcomeMessage = new WelcomeMessage();
-    private final GetInformation getInformation = new GetInformation();
-    private final SettingsButton settingsButton = new SettingsButton();
+    private final AllButtons allButtons = new AllButtons();
 
     @Override
     public void onUpdateReceived(Update update) {
-        long chatId = update.getMessage().getChatId();
 
         if (update.hasMessage() && update.getMessage().hasText()) {
+            long chatId = update.getMessage().getChatId();
             String messageText = update.getMessage().getText();
             if ("/start".equals(messageText)) {
-                welcomeMessage.sendWelcomeMessage(chatId, this);
+                allButtons.sendWelcomeMessage(chatId, this);
             }
         } else if (update.hasCallbackQuery()) {
             handleCallbackQuery(update.getCallbackQuery());
         }
 
         GettingExchangeRates bankRates = new GettingExchangeRates();
+        long chatId = update.getMessage().getChatId();
         String bank = update.getMessage().getText();
         try {
             String message = bankRates.getExchangeRates(bank);
@@ -56,25 +53,25 @@ public class MyBot extends TelegramLongPollingBot {
 
         switch (callbackData) {
             case "info":
-                getInformation.sendInformation(chatId, this);
+                allButtons.sendInformation(chatId, this);
                 break;
             case "settings_menu":
-                settingsButton.sendSettingsMenu(chatId, this);
+                allButtons.sendSettingsMenu(chatId, this);
                 break;
-            case "setting1":
-                settingsButton.sendNumberOfDecimalPlaces(chatId, this);
+            case "numberOfDecimalPlaces":
+                allButtons.sendNumberOfDecimalPlaces(chatId, this);
                 break;
-            case "setting2":
-                settingsButton.sendBank(chatId, this);
+            case "bank":
+                allButtons.sendBank(chatId, this);
                 break;
-            case "setting3":
-                settingsButton.sendCurrencies(chatId, this);
+            case "currencies":
+                allButtons.sendCurrencies(chatId, this);
                 break;
-            case "setting4":
-                settingsButton.sendNotificationTime(chatId, this);
+            case "notificationTime":
+                allButtons.sendNotificationTime(chatId, this);
                 break;
-            case "setting5":
-                welcomeMessage.sendWelcomeMessage(chatId, this);
+            case "back":
+                allButtons.sendWelcomeMessage(chatId, this);
                 break;
         }
     }

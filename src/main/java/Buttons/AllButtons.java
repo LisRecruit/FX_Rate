@@ -12,27 +12,75 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsButton {
+
+public class AllButtons {
+    public void sendWelcomeMessage(long chatId, MyBot bot) {
+
+        InlineKeyboardButton button1 = new InlineKeyboardButton();
+        button1.setText("Отримати інфо");
+        button1.setCallbackData("info"); // інфа за вибором користувача
+
+        InlineKeyboardButton button2 = new InlineKeyboardButton();
+        button2.setText("Налаштування");
+        button2.setCallbackData("settings_menu");
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button1);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(button2);
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(row1);
+        keyboard.add(row2);
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(keyboard);
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Привіт! Цей котик допоможе вам відстежувати актуальний курс валют");
+        message.setReplyMarkup(inlineKeyboardMarkup);
+
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendInformation(long chatId, MyBot bot) {   //клас для збереження інформації юзера
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Here is the information you requested!");
+
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendSettingsMenu(long chatId, MyBot bot) {
         InlineKeyboardButton button1 = new InlineKeyboardButton();
         button1.setText("Кількість знаків після коми");
-        button1.setCallbackData("setting1");
+        button1.setCallbackData("numberOfDecimalPlaces");
 
         InlineKeyboardButton button2 = new InlineKeyboardButton();
         button2.setText("Банк");
-        button2.setCallbackData("setting2");
+        button2.setCallbackData("bank");
 
         InlineKeyboardButton button3 = new InlineKeyboardButton();
         button3.setText("Валюти");
-        button3.setCallbackData("setting3");
+        button3.setCallbackData("currencies");
 
         InlineKeyboardButton button4 = new InlineKeyboardButton();
         button4.setText("Час оповіщень");
-        button4.setCallbackData("setting4");
+        button4.setCallbackData("notificationTime");
 
         InlineKeyboardButton button5 = new InlineKeyboardButton();
         button5.setText("Назад");
-        button5.setCallbackData("setting5");
+        button5.setCallbackData("back");
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(button1);
@@ -188,6 +236,7 @@ public class SettingsButton {
             e.printStackTrace();
         }
     }
+
     public void sendNotificationTime(long chatId, MyBot bot) {
 
         SendMessage message = new SendMessage();
