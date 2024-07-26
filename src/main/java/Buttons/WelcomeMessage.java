@@ -1,9 +1,7 @@
 package Buttons;
 
 import BanksRequests.MyBot;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -21,7 +19,7 @@ public class WelcomeMessage {
 
         InlineKeyboardButton button2 = new InlineKeyboardButton();
         button2.setText("Налаштування");
-        button2.setCallbackData("settings menu");
+        button2.setCallbackData("settings_menu");
 
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();

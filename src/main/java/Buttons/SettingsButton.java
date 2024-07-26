@@ -3,7 +3,10 @@ package Buttons;
 import BanksRequests.MyBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
@@ -13,19 +16,23 @@ public class SettingsButton {
     public void sendSettingsMenu(long chatId, MyBot bot) {
         InlineKeyboardButton button1 = new InlineKeyboardButton();
         button1.setText("Кількість знаків після коми");
-        button1.setCallbackData("setting_1");
+        button1.setCallbackData("setting1");
 
         InlineKeyboardButton button2 = new InlineKeyboardButton();
         button2.setText("Банк");
-        button2.setCallbackData("setting_2");
+        button2.setCallbackData("setting2");
 
         InlineKeyboardButton button3 = new InlineKeyboardButton();
         button3.setText("Валюти");
-        button3.setCallbackData("setting_3");
+        button3.setCallbackData("setting3");
 
         InlineKeyboardButton button4 = new InlineKeyboardButton();
         button4.setText("Час оповіщень");
-        button4.setCallbackData("setting_4");
+        button4.setCallbackData("setting4");
+
+        InlineKeyboardButton button5 = new InlineKeyboardButton();
+        button5.setText("Назад");
+        button5.setCallbackData("setting5");
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(button1);
@@ -39,11 +46,15 @@ public class SettingsButton {
         List<InlineKeyboardButton> row4 = new ArrayList<>();
         row4.add(button4);
 
+        List<InlineKeyboardButton> row5 = new ArrayList<>();
+        row5.add(button5);
+
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(row1);
         keyboard.add(row2);
         keyboard.add(row3);
         keyboard.add(row4);
+        keyboard.add(row5);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(keyboard);
@@ -52,6 +63,167 @@ public class SettingsButton {
         message.setChatId(chatId);
         message.setText("Налаштування");
         message.setReplyMarkup(inlineKeyboardMarkup);
+
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendNumberOfDecimalPlaces(long chatId, MyBot bot) {
+        InlineKeyboardButton button1 = new InlineKeyboardButton();
+        button1.setText("2");
+        button1.setCallbackData("2number");
+
+        InlineKeyboardButton button2 = new InlineKeyboardButton();
+        button2.setText("3");
+        button2.setCallbackData("3number");
+
+        InlineKeyboardButton button3 = new InlineKeyboardButton();
+        button3.setText("4");
+        button3.setCallbackData("4number");
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button1);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(button2);
+
+        List<InlineKeyboardButton> row3 = new ArrayList<>();
+        row3.add(button3);
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(row1);
+        keyboard.add(row2);
+        keyboard.add(row3);
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(keyboard);
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Оберіть кількість знаків після коми");
+        message.setReplyMarkup(inlineKeyboardMarkup);
+
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendBank(long chatId, MyBot bot) {
+        InlineKeyboardButton button1 = new InlineKeyboardButton();
+        button1.setText("НБУ");
+        button1.setCallbackData("nbu");
+
+        InlineKeyboardButton button2 = new InlineKeyboardButton();
+        button2.setText("ПриватБанк");
+        button2.setCallbackData("privat24");
+
+        InlineKeyboardButton button3 = new InlineKeyboardButton();
+        button3.setText("МоноБанк");
+        button3.setCallbackData("mono_bank");
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button1);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(button2);
+
+        List<InlineKeyboardButton> row3 = new ArrayList<>();
+        row3.add(button3);
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(row1);
+        keyboard.add(row2);
+        keyboard.add(row3);
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(keyboard);
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Оберіть банк");
+        message.setReplyMarkup(inlineKeyboardMarkup);
+
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendCurrencies(long chatId, MyBot bot) {
+        InlineKeyboardButton button1 = new InlineKeyboardButton();
+        button1.setText("USD");
+        button1.setCallbackData("usd");
+
+        InlineKeyboardButton button2 = new InlineKeyboardButton();
+        button2.setText("EUR");
+        button2.setCallbackData("eur");
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(button1);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(button2);
+
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(row1);
+        keyboard.add(row2);
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        inlineKeyboardMarkup.setKeyboard(keyboard);
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Оберіть валюту");
+        message.setReplyMarkup(inlineKeyboardMarkup);
+
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendNotificationTime(long chatId, MyBot bot) {
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText("Оберіть час оповіщень");
+
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+        keyboardMarkup.setResizeKeyboard(true);
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+
+        KeyboardRow row1 = new KeyboardRow();
+        row1.add(new KeyboardButton("9"));
+        row1.add(new KeyboardButton("10"));
+        row1.add(new KeyboardButton("11"));
+        keyboard.add(row1);
+
+        KeyboardRow row2 = new KeyboardRow();
+        row2.add(new KeyboardButton("12"));
+        row2.add(new KeyboardButton("13"));
+        row2.add(new KeyboardButton("14"));
+        keyboard.add(row2);
+
+        KeyboardRow row3 = new KeyboardRow();
+        row3.add(new KeyboardButton("15"));
+        row3.add(new KeyboardButton("16"));
+        row3.add(new KeyboardButton("17"));
+        keyboard.add(row3);
+
+        KeyboardRow row4 = new KeyboardRow();
+        row4.add(new KeyboardButton("18"));
+        row4.add(new KeyboardButton("Вимкнути повідомлення"));
+        keyboard.add(row4);
+
+        keyboardMarkup.setKeyboard(keyboard);
+        message.setReplyMarkup(keyboardMarkup);
 
         try {
             bot.execute(message);

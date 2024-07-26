@@ -13,13 +13,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 @Component
@@ -31,9 +30,9 @@ public class MyBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         long chatId = update.getMessage().getChatId();
+
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
-//            long chatId = update.getMessage().getChatId();
             if ("/start".equals(messageText)) {
                 welcomeMessage.sendWelcomeMessage(chatId, this);
             }
@@ -59,73 +58,24 @@ public class MyBot extends TelegramLongPollingBot {
             case "info":
                 getInformation.sendInformation(chatId, this);
                 break;
-            case "settings menu":
+            case "settings_menu":
                 settingsButton.sendSettingsMenu(chatId, this);
                 break;
-            case "setting_1":
-                // Обработка для настройки 1
-                handleSetting1(chatId);
+            case "setting1":
+                settingsButton.sendNumberOfDecimalPlaces(chatId, this);
                 break;
-            case "setting_2":
-                // Обработка для настройки 2
-                handleSetting2(chatId);
+            case "setting2":
+                settingsButton.sendBank(chatId, this);
                 break;
-            case "setting_3":
-                // Обработка для настройки 3
-                handleSetting3(chatId);
+            case "setting3":
+                settingsButton.sendCurrencies(chatId, this);
                 break;
-            case "setting_4":
-                // Обработка для настройки 4
-                handleSetting4(chatId);
+            case "setting4":
+                settingsButton.sendNotificationTime(chatId, this);
                 break;
-        }
-    }
-
-    private void handleSetting1(long chatId) {
-        // Логика для настройки 1
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Setting 1 is now configured.");
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void handleSetting2(long chatId) {
-        // Логика для настройки 2
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Setting 2 is now configured.");
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void handleSetting3(long chatId) {
-        // Логика для настройки 3
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Setting 3 is now configured.");
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void handleSetting4(long chatId) {
-        // Логика для настройки 4
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("Setting 4 is now configured.");
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+            case "setting5":
+                welcomeMessage.sendWelcomeMessage(chatId, this);
+                break;
         }
     }
 
