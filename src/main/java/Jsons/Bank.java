@@ -7,7 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public abstract class Bank {
-
     protected String fetchData(String apiUrl) throws IOException {
         URL url = new URL(apiUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -28,7 +27,7 @@ public abstract class Bank {
         return response.toString();
     }
 
-    public abstract String getExchangeRates() throws IOException;
-    protected abstract String parseResponse(String jsonResponse);
+    public abstract String getExchangeRates(String[] currency) throws IOException;
+    protected abstract String parseResponse(String jsonResponse, String[] currency);
 }
 

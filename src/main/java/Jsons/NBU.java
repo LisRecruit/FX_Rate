@@ -11,24 +11,25 @@ public class NBU extends Bank {
     private static final String NBU_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 
     @Override
-    public String getExchangeRates() throws IOException {
+    public String getExchangeRates(String[] currency) throws IOException {
         String jsonResponse = fetchData(NBU_URL);
-        return parseResponse(jsonResponse);
+        return parseResponse(jsonResponse, currency);
     }
 
     @Override
-    protected String parseResponse(String jsonResponse) {
+    protected String parseResponse(String jsonResponse, String[] currency) {
         StringBuilder result = new StringBuilder();
         JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
+        result.append("Назва банку: Національний банк України\n\n");
         for (JsonElement jsonElement : jsonArray) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             String ccy = jsonObject.get("cc").getAsString();
-            if (ccy.equals("USD") || ccy.equals("EUR")) {
+            if (ccy.equals(currency[0]) || ccy.equals(currency[1])) {
                 String rate = jsonObject.get("rate").getAsString();
-                result.append("Currency: ").append(ccy).append("/UAH\n")
-                        .append("Buy: ").append(rate).append("\n")
-                        .append("Sale: ").append(rate).append("\n")
-                        .append("-----------\n");
+                result.append("Валюта: ").append(ccy).append("/UAH\n")
+                        .append("Купівля: ").append(rate).append("\n")
+                        .append("Продаж: ").append(rate).append("\n")
+                        .append("---------------------------\n");
             }
         }
         return result.toString();
