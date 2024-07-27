@@ -11,13 +11,13 @@ public class MonoBank extends Bank {
     private static final String MONOBANK_URL = "https://api.monobank.ua/bank/currency";
 
     @Override
-    public String getExchangeRates(String[] currency) throws IOException {
+    public String getExchangeRates(String[] currency, int digitsAfterComs) throws IOException {
         String jsonResponse = fetchData(MONOBANK_URL);
-        return parseResponse(jsonResponse, currency);
+        return parseResponse(jsonResponse, currency, digitsAfterComs);
     }
 
     @Override
-    protected String parseResponse(String jsonResponse, String[] currency) {
+    protected String parseResponse(String jsonResponse, String[] currency, int digitsAfterComs) {
         StringBuilder result = new StringBuilder();
         JsonArray jsonArray = JsonParser.parseString(jsonResponse).getAsJsonArray();
         result.append("Назва банку: Монобанк\n\n");
@@ -30,8 +30,8 @@ public class MonoBank extends Bank {
                 for(String cur : currency) {
                     if(cur.equals(ccy)){
                         String baseCcy = "UAH";
-                        String rateBuy = jsonObject.get("rateBuy").getAsString();
-                        String rateSell = jsonObject.get("rateSell").getAsString();
+                        String rateBuy = formatAndRoundNumber(jsonObject.get("rateBuy").getAsDouble(), digitsAfterComs);
+                        String rateSell = formatAndRoundNumber(jsonObject.get("rateSell").getAsDouble(), digitsAfterComs);
                         result.append("Валюта: ").append(ccy).append("/").append(baseCcy).append("\n")
                                 .append("Купівля: ").append(rateBuy).append("\n")
                                 .append("Продаж: ").append(rateSell).append("\n")
@@ -42,4 +42,6 @@ public class MonoBank extends Bank {
         }
         return result.toString();
     }
+
+
 }

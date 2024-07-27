@@ -9,9 +9,9 @@ public class Users {
     }
 
     private final long chatId;
-    private String bank = "/nbu";
-    private int digitsAfterComs = 2;
-    private String currency[] = new String[]{"USD", ""};
+    private String bank = "/mono";
+    private int digitsAfterComs = 4;
+    private String currency[] = new String[]{"USD", "EUR"};
     private boolean enableNotifications = false;
     private LocalTime specificTime = LocalTime.of(9, 0);
 

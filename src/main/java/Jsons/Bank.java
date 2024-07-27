@@ -26,8 +26,15 @@ public abstract class Bank {
         in.close();
         return response.toString();
     }
+    public static String formatAndRoundNumber(double number, int digitsAfterComs) {
+        double scale = Math.pow(10, digitsAfterComs);
+        double roundedNumber = Math.round(number * scale) / scale;
+        String format = "%." + digitsAfterComs + "f";
 
-    public abstract String getExchangeRates(String[] currency) throws IOException;
-    protected abstract String parseResponse(String jsonResponse, String[] currency);
+        return String.format(format, roundedNumber);
+    }
+
+    public abstract String getExchangeRates(String[] currency, int digitsAfterComs) throws IOException;
+    protected abstract String parseResponse(String jsonResponse, String[] currency, int digitsAfterComs);
 }
 
