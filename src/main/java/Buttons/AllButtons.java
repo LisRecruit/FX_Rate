@@ -1,7 +1,10 @@
 package Buttons;
 
 import BanksRequests.MyBot;
+import BotUtils.Users;
+import Jsons.GettingExchangeRates;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -9,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +53,17 @@ public class AllButtons {
         }
     }
 
-    public void sendInformation(long chatId, MyBot bot) {   //клас для збереження інформації юзера
+    public void sendInformation(long chatId, MyBot bot) {
         SendMessage message = new SendMessage();
+        GettingExchangeRates bankRates = new GettingExchangeRates();
+        Users user = new Users(chatId);
         message.setChatId(chatId);
-        message.setText("Here is the information you requested!");
-
+        try {
+            message.setText(bankRates.getExchangeRates(user));
+        } catch (IOException e) {
+            e.printStackTrace();
+            message.setText("Не вдалося отримати курси валют");
+        }
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {

@@ -1,6 +1,5 @@
 package BanksRequests;
 
-
 import Buttons.AllButtons;
 
 import Jsons.GettingExchangeRates;
@@ -10,11 +9,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
 
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -34,16 +28,6 @@ public class MyBot extends TelegramLongPollingBot {
             }
         } else if (update.hasCallbackQuery()) {
             handleCallbackQuery(update.getCallbackQuery());
-        }
-
-        GettingExchangeRates bankRates = new GettingExchangeRates();
-        long chatId = update.getMessage().getChatId();
-        String bank = update.getMessage().getText();
-        try {
-            String message = bankRates.getExchangeRates(bank);
-            sendMessage(chatId, message);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

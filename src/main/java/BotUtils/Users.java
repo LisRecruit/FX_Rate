@@ -1,20 +1,17 @@
 package BotUtils;
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-
-import java.sql.Time;
 import java.time.LocalTime;
 
-public class User {
+public class Users {
 
-    public User (long chatId) {
+    public Users(long chatId) {
         this.chatId=chatId;
     }
 
     private final long chatId;
     private String bank = "/nbu";
     private int digitsAfterComs = 2;
-    private String currency = "USD";
+    private String currency[] = new String[]{"USD", ""};
     private boolean enableNotifications = false;
     private LocalTime specificTime = LocalTime.of(9, 0);
 
@@ -26,7 +23,7 @@ public class User {
         return digitsAfterComs;
     }
 
-    public String getCurrency() {
+    public String[] getCurrency() {
         return currency;
     }
 
@@ -47,7 +44,7 @@ public class User {
         this.digitsAfterComs = digitsAfterComs;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(String[] currency) {
         this.currency = currency;
     }
 
