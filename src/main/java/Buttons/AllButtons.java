@@ -174,15 +174,15 @@ public class AllButtons {
     public void sendBank(long chatId, MyBot bot) {
         InlineKeyboardButton button1 = new InlineKeyboardButton();
         button1.setText("НБУ");
-        button1.setCallbackData("nbu");
+        button1.setCallbackData("setNbu");
 
         InlineKeyboardButton button2 = new InlineKeyboardButton();
         button2.setText("ПриватБанк");
-        button2.setCallbackData("privat24");
+        button2.setCallbackData("setPrivat24");
 
         InlineKeyboardButton button3 = new InlineKeyboardButton();
         button3.setText("МоноБанк");
-        button3.setCallbackData("mono_bank");
+        button3.setCallbackData("setMono_bank");
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(button1);
