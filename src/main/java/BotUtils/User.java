@@ -16,8 +16,6 @@ public class User {
     private final long chatId;
     private String bank = "mono";
     private int digitsAfterComs = 4;
-    private String currency[] = new String[]{"USD", "EUR"};
-
     private boolean isUsd = true;
     private boolean isEur = false;
 
