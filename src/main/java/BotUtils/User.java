@@ -1,6 +1,11 @@
 package BotUtils;
 
+import BanksRequests.MyBot;
+import Buttons.AllButtons;
+
 import java.time.LocalTime;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class User {
 
@@ -9,7 +14,7 @@ public class User {
     }
 
     private final long chatId;
-    private String bank = "/mono";
+    private String bank = "mono";
     private int digitsAfterComs = 4;
     private String currency[] = new String[]{"USD", "EUR"};
 
@@ -17,8 +22,8 @@ public class User {
     private boolean isEur = false;
 
 
-    private boolean enableNotifications = false;
-    private LocalTime specificTime = LocalTime.of(9, 0);
+    private boolean enableNotifications = true;
+    private LocalTime userNotificationTime = LocalTime.of(20, 11);
 
     public boolean isUsdEnable(){
         return isUsd;
@@ -42,16 +47,13 @@ public class User {
         return digitsAfterComs;
     }
 
-    public String[] getCurrency() {
-        return currency;
-    }
 
     public boolean isEnableNotifications() {
         return enableNotifications;
     }
 
-    public LocalTime getSpecificTime() {
-        return specificTime;
+    public LocalTime getUserNotificationTime() {
+        return userNotificationTime;
     }
 
 
@@ -63,10 +65,6 @@ public class User {
         this.digitsAfterComs = digitsAfterComs;
     }
 
-    public void setCurrency(String[] currency) {
-        this.currency = currency;
-    }
-
     public long getChatId() {
         return chatId;
     }
@@ -75,8 +73,8 @@ public class User {
         this.enableNotifications = enableNotifications;
     }
 
-    public void setSpecificTime(LocalTime specificTime) {
-        this.specificTime = specificTime;
+    public void setUserNotificationTime(LocalTime userNotificationTime) {
+        this.userNotificationTime = userNotificationTime;
     }
 
     public void switchNotification (){
@@ -86,5 +84,48 @@ public class User {
             this.setEnableNotifications(true);
         }
     }
+
+
+
+    public class NotificatorUser {
+        public NotificatorUser(MyBot bot){
+            this.bot=bot;
+        }
+        private final MyBot bot;
+        private Timer taskTimer = new Timer();
+        private SendNotification sendNotification = new SendNotification();
+
+        long delay = getDelayUntil(userNotificationTime);
+        long period = 24 * 60 * 60 * 1000; //24h
+
+        public void startTimer(){
+
+            taskTimer.scheduleAtFixedRate(sendNotification, delay, period);
+        }
+
+        public class SendNotification extends TimerTask {
+
+            private final AllButtons sendInfo = new AllButtons();
+            @Override
+            public void run() {
+                sendInfo.sendInformation(chatId, bot);
+            }
+        }
+
+        private long getDelayUntil(LocalTime notificationTime) {
+            LocalTime now = LocalTime.now();
+            long delay;
+
+            if (now.isBefore(notificationTime)) {
+                delay = now.until(notificationTime, java.time.temporal.ChronoUnit.MILLIS);
+            } else {
+                delay = now.until(notificationTime.plusHours(24), java.time.temporal.ChronoUnit.MILLIS);
+            }
+
+            return delay;
+        }
+
+    }
+
 }
 

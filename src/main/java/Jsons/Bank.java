@@ -34,7 +34,7 @@ public abstract class Bank {
         return String.format(format, roundedNumber);
     }
 
-    public abstract String getExchangeRates(String[] currency, int digitsAfterComs) throws IOException;
-    protected abstract String parseResponse(String jsonResponse, String[] currency, int digitsAfterComs);
+    public abstract String getExchangeRates(boolean isUsd, boolean isEur, int digitsAfterComs) throws IOException;
+    protected abstract String parseResponse(String jsonResponse, boolean isUsd, boolean isEur, int digitsAfterComs);
 }
 

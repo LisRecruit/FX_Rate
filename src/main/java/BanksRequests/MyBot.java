@@ -30,8 +30,15 @@ public class MyBot extends TelegramLongPollingBot {
                     User newUser = new User(chatId);
                     UserStorage.saveUser(newUser);
                 }
+
                 allButtons.sendWelcomeMessage(chatId, this);
+
+                User user = UserStorage.getUser(chatId);
+                User.NotificatorUser notificator = user.new NotificatorUser(this);
+                notificator.startTimer();
+
             }
+
         } else if (update.hasCallbackQuery()) {
             handleCallbackQuery(update.getCallbackQuery());
         }
@@ -58,7 +65,7 @@ public class MyBot extends TelegramLongPollingBot {
                 allButtons.sendCurrencies(chatId, this);
                 break;
             case "notificationTime":
-                allButtons.sendNotificationTime(chatId, this);
+                allButtons.sendNotificationTimeButton(chatId, this);
                 break;
             case "back":
                 allButtons.sendWelcomeMessage(chatId, this);
