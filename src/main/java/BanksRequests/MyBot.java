@@ -1,4 +1,9 @@
 package BanksRequests;
+
+
+import BotUtils.UserStorage;
+import BotUtils.Users;
+
 import Buttons.AllButtons;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -6,6 +11,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 
 
 
@@ -19,6 +25,10 @@ public class MyBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
             String messageText = update.getMessage().getText();
             if ("/start".equals(messageText)) {
+                if (!UserStorage.containsUser(chatId)){
+                    Users newUser = new Users(chatId);
+                    UserStorage.saveUser(newUser);
+                }
                 allButtons.sendWelcomeMessage(chatId, this);
             }
         } else if (update.hasCallbackQuery()) {
@@ -51,6 +61,18 @@ public class MyBot extends TelegramLongPollingBot {
                 break;
             case "back":
                 allButtons.sendWelcomeMessage(chatId, this);
+                break;
+            case "setNbu":
+                UserStorage.getUser(chatId).setBank("nbu");
+                System.out.println(UserStorage.getUser(chatId).getBank());
+                break;
+            case "setPrivat24":
+                UserStorage.getUser(chatId).setBank("privat24");
+                System.out.println(UserStorage.getUser(chatId).getBank());
+                break;
+            case "setMono_bank":
+                UserStorage.getUser(chatId).setBank("mono");
+                System.out.println(UserStorage.getUser(chatId).getBank());
                 break;
         }
     }
