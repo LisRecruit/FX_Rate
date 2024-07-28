@@ -9,12 +9,13 @@ public class GettingExchangeRates {
         Bank service;
         String bankName = user.getBank();
         String currency[] = user.getCurrency();
+        int digitsAfterComs = user.getDigitsAfterComs();
         switch (bankName) {
             case "/privat24" -> service = new Privat24();
             case "/mono" -> service = new MonoBank();
             case "/nbu" -> service = new NBU();
             default -> throw new IllegalArgumentException("Unsupported bank: " + bankName);
         }
-        return service.getExchangeRates(currency);
+        return service.getExchangeRates(currency, digitsAfterComs);
     }
 }
