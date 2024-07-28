@@ -1,10 +1,9 @@
 package Buttons;
 
 import BanksRequests.MyBot;
-import BotUtils.Users;
+import BotUtils.UserStorage;
 import Jsons.GettingExchangeRates;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -56,10 +55,9 @@ public class AllButtons {
     public void sendInformation(long chatId, MyBot bot) {
         SendMessage message = new SendMessage();
         GettingExchangeRates bankRates = new GettingExchangeRates();
-        Users user = new Users(chatId);
         message.setChatId(chatId);
         try {
-            message.setText(bankRates.getExchangeRates(user));
+            message.setText(bankRates.getExchangeRates(UserStorage.getUser(chatId)));
         } catch (IOException e) {
             e.printStackTrace();
             message.setText("Не вдалося отримати курси валют");
@@ -132,15 +130,15 @@ public class AllButtons {
     public void sendNumberOfDecimalPlaces(long chatId, MyBot bot) {
         InlineKeyboardButton button1 = new InlineKeyboardButton();
         button1.setText("2");
-        button1.setCallbackData("2number");
+        button1.setCallbackData("set 2 digits after coma");
 
         InlineKeyboardButton button2 = new InlineKeyboardButton();
         button2.setText("3");
-        button2.setCallbackData("3number");
+        button2.setCallbackData("set 3 digits after coma");
 
         InlineKeyboardButton button3 = new InlineKeyboardButton();
         button3.setText("4");
-        button3.setCallbackData("4number");
+        button3.setCallbackData("set 4 digits after coma");
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(button1);
@@ -216,11 +214,11 @@ public class AllButtons {
     public void sendCurrencies(long chatId, MyBot bot) {
         InlineKeyboardButton button1 = new InlineKeyboardButton();
         button1.setText("USD");
-        button1.setCallbackData("usd");
+        button1.setCallbackData("setusd");
 
         InlineKeyboardButton button2 = new InlineKeyboardButton();
         button2.setText("EUR");
-        button2.setCallbackData("eur");
+        button2.setCallbackData("seteur");
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(button1);

@@ -4,10 +4,15 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Notificator {
     private TelegramLongPollingBot bot;
@@ -18,9 +23,7 @@ public class Notificator {
         this.timer = new Timer(true);
     }
 
-    public void scheduleDailyNotification(long chatId, String time, String messageText) {
-        LocalTime notificationTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
-
+    public void scheduleDailyNotification(long chatId, LocalTime time, String messageText) {
         TimerTask dailyTask = new TimerTask() {
             @Override
             public void run() {
@@ -28,11 +31,13 @@ public class Notificator {
             }
         };
 
-        long delay = getDelayUntil(notificationTime);
+        long delay = getDelayUntil(time);
         long period = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
         timer.scheduleAtFixedRate(dailyTask, delay, period);
     }
+
+
 
     private void sendNotification(long chatId, String messageText) {
         SendMessage message = new SendMessage();

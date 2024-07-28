@@ -2,9 +2,9 @@ package BotUtils;
 
 import java.time.LocalTime;
 
-public class Users {
+public class User {
 
-    public Users(long chatId) {
+    public User(long chatId) {
         this.chatId=chatId;
     }
 
@@ -12,8 +12,27 @@ public class Users {
     private String bank = "/mono";
     private int digitsAfterComs = 4;
     private String currency[] = new String[]{"USD", "EUR"};
+
+    private boolean isUsd = true;
+    private boolean isEur = false;
+
+
     private boolean enableNotifications = false;
     private LocalTime specificTime = LocalTime.of(9, 0);
+
+    public boolean isUsdEnable(){
+        return isUsd;
+    }
+    public boolean isEurEnable(){
+        return isEur;
+    }
+    public void setUsd (boolean isUsd){
+        this.isUsd=isUsd;
+    }
+    public void setEur (boolean isEur){
+        this.isEur=isEur;
+    }
+
 
     public String getBank() {
         return bank;
