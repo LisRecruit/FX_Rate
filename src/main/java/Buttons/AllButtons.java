@@ -57,7 +57,7 @@ public class AllButtons {
         GettingExchangeRates bankRates = new GettingExchangeRates();
         message.setChatId(chatId);
         try {
-            message.setText(bankRates.getExchangeRates(UserStorage.getUser(chatId)));
+            message.setText(bankRates.getExchangeRates(chatId));
         } catch (IOException e) {
             e.printStackTrace();
             message.setText("Не вдалося отримати курси валют");

@@ -9,10 +9,8 @@ public class User {
     }
 
     private final long chatId;
-    private String bank = "/mono";
+    private String bank = "mono";
     private int digitsAfterComs = 4;
-    private String currency[] = new String[]{"USD", "EUR"};
-
     private boolean isUsd = true;
     private boolean isEur = false;
 
@@ -42,9 +40,6 @@ public class User {
         return digitsAfterComs;
     }
 
-    public String[] getCurrency() {
-        return currency;
-    }
 
     public boolean isEnableNotifications() {
         return enableNotifications;
@@ -61,10 +56,6 @@ public class User {
 
     public void setDigitsAfterComs(int digitsAfterComs) {
         this.digitsAfterComs = digitsAfterComs;
-    }
-
-    public void setCurrency(String[] currency) {
-        this.currency = currency;
     }
 
     public long getChatId() {
