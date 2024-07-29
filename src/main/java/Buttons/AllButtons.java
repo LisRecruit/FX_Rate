@@ -1,11 +1,13 @@
 package Buttons;
 
 import BanksRequests.MyBot;
-import BotUtils.Users;
+import BotUtils.UserStorage;
 import Jsons.GettingExchangeRates;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.User;
+
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -71,10 +73,9 @@ public class AllButtons {
 
         SendMessage message = new SendMessage();
         GettingExchangeRates bankRates = new GettingExchangeRates();
-        Users user = new Users(chatId);
         message.setChatId(chatId);
         try {
-            message.setText(bankRates.getExchangeRates(user));
+            message.setText(bankRates.getExchangeRates(chatId));
         } catch (IOException e) {
             e.printStackTrace();
             message.setText("Не вдалося отримати курси валют");
@@ -146,11 +147,26 @@ public class AllButtons {
         }
     }
 
+
     public void sendNumberOfDecimalPlaces(long chatId, int messageId, MyBot bot) {
         EditMessageText message = new EditMessageText();
         message.setChatId(chatId);
         message.setMessageId(messageId);
         message.setText("Оберіть кількість знаків після коми:");
+
+//     public void sendNumberOfDecimalPlaces(long chatId, MyBot bot) {
+//         InlineKeyboardButton button1 = new InlineKeyboardButton();
+//         button1.setText("2");
+//         button1.setCallbackData("set 2 digits after coma");
+
+//         InlineKeyboardButton button2 = new InlineKeyboardButton();
+//         button2.setText("3");
+//         button2.setCallbackData("set 3 digits after coma");
+
+//         InlineKeyboardButton button3 = new InlineKeyboardButton();
+//         button3.setText("4");
+//         button3.setCallbackData("set 4 digits after coma");
+
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
@@ -212,6 +228,7 @@ public class AllButtons {
         }
     }
 
+
     private List<InlineKeyboardButton> createButtonRow(String text, String currentChoice, String callbackData) {
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(currentChoice != null && currentChoice.equals(callbackData) ? text + " ✅" : text);
@@ -221,6 +238,16 @@ public class AllButtons {
         row.add(button);
         return row;
     }
+
+    public void sendCurrencies(long chatId, MyBot bot) {
+        InlineKeyboardButton button1 = new InlineKeyboardButton();
+        button1.setText("USD");
+        button1.setCallbackData("setusd");
+
+        InlineKeyboardButton button2 = new InlineKeyboardButton();
+        button2.setText("EUR");
+        button2.setCallbackData("seteur");
+
 
     public void sendCurrencies(long chatId, int messageId, MyBot bot) {
         EditMessageText message = new EditMessageText();
@@ -263,7 +290,7 @@ public class AllButtons {
         return row;
     }
 
-    public void sendNotificationTime(long chatId, MyBot bot) {
+    public void sendNotificationTimeButton(long chatId, MyBot bot) {
 
         SendMessage message = new SendMessage();
         message.setChatId(chatId);

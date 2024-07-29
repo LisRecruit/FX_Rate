@@ -1,10 +1,8 @@
 package BanksRequests;
 
 import BotUtils.UserStorage;
-import BotUtils.Users;
+import BotUtils.User;
 import Buttons.AllButtons;
-
-import Jsons.GettingExchangeRates;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -37,12 +35,20 @@ public class MyBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             if ("/start".equals(messageText)) {
                 if (!UserStorage.containsUser(chatId)){
-                    Users newUser = new Users(chatId);
+                    User newUser = new User(chatId);
                     UserStorage.saveUser(newUser);
                 }
-                setDefaultChoices(chatId);
+
+                setDefaultChoices(chatId); //added
+
                 allButtons.sendWelcomeMessage(chatId, this);
+
+                User user = UserStorage.getUser(chatId);
+                User.NotificatorUser notificator = user.new NotificatorUser(this);
+                notificator.startTimer();
+
             }
+
         } else if (update.hasCallbackQuery()) {
             handleCallbackQuery(update.getCallbackQuery());
         }
@@ -59,6 +65,7 @@ public class MyBot extends TelegramLongPollingBot {
         String callbackData = callbackQuery.getData();
         long chatId = callbackQuery.getMessage().getChatId();
         int messageId = callbackQuery.getMessage().getMessageId();
+
 
         if (callbackData.startsWith("decimal_")) {
             decimalChoices.put(chatId, callbackData);
@@ -122,6 +129,42 @@ public class MyBot extends TelegramLongPollingBot {
             execute(deleteMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
+
+//         switch (callbackData) {
+//             case "info":
+//                 allButtons.sendInformation(chatId, this);
+//                 break;
+//             case "settings_menu":
+//                 allButtons.sendSettingsMenu(chatId, this);
+//                 break;
+//             case "numberOfDecimalPlaces":
+//                 allButtons.sendNumberOfDecimalPlaces(chatId, this);
+//                 break;
+//             case "bank":
+//                 allButtons.sendBank(chatId, this);
+//                 break;
+//             case "currencies":
+//                 allButtons.sendCurrencies(chatId, this);
+//                 break;
+//             case "notificationTime":
+//                 allButtons.sendNotificationTimeButton(chatId, this);
+//                 break;
+//             case "back":
+//                 allButtons.sendWelcomeMessage(chatId, this);
+//                 break;
+//             case "setNbu":
+//                 UserStorage.getUser(chatId).setBank("nbu");
+//                 System.out.println(UserStorage.getUser(chatId).getBank());
+//                 break;
+//             case "setPrivat24":
+//                 UserStorage.getUser(chatId).setBank("privat24");
+//                 System.out.println(UserStorage.getUser(chatId).getBank());
+//                 break;
+//             case "setMono_bank":
+//                 UserStorage.getUser(chatId).setBank("mono");
+//                 System.out.println(UserStorage.getUser(chatId).getBank());
+//                 break;
+
         }
     }
 
