@@ -25,7 +25,7 @@ public class NBU extends Bank {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             String ccy = jsonObject.get("cc").getAsString();
             if ((isUsd && ccy.equals("USD")) || (isEur && ccy.equals("EUR"))) {
-                String rate = formatAndRoundNumber(jsonObject.get("rate").getAsDouble(),digitsAfterComs) ;
+                String rate = formatAndRoundNumber(jsonObject.get("rate").getAsDouble(), digitsAfterComs);
                 result.append("Валюта: ").append(ccy).append("/UAH\n")
                         .append("Купівля: ").append(rate).append("\n")
                         .append("Продаж: ").append(rate).append("\n")

@@ -20,5 +20,4 @@ public class UserStorage {
         }  return false;
     }
 
-
 }

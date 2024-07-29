@@ -53,6 +53,14 @@ public class MyBot extends TelegramLongPollingBot {
 
         } else if (update.hasCallbackQuery()) {
             handleCallbackQuery(update.getCallbackQuery());
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            String callbackData = callbackQuery.getData();
+            long chatId = callbackQuery.getMessage().getChatId();
+
+            if ("currentSettings".equals(callbackData)) {
+                sendCurrentSettings(chatId);
+                System.out.println(UserStorage.getUser(chatId).toString());
+            }
         }
     }
 
@@ -155,7 +163,7 @@ public class MyBot extends TelegramLongPollingBot {
 
             case "switch_notifications":
                 UserStorage.getUser(chatId).switchNotification();
-                System.out.println("Notifications enabled "+UserStorage.getUser(chatId).isEnableNotifications());
+                System.out.println("Notifications enabled " + UserStorage.getUser(chatId).isEnableNotifications());
         }
     }
 
@@ -200,6 +208,18 @@ public class MyBot extends TelegramLongPollingBot {
     private void updateNotificationButtons(long chatId, int messageId, String selectedTime, MyBot bot) {
         timeChoices.put(chatId, selectedTime);
         allButtons.sendNotificationTimeButton(chatId, messageId, bot);
+    }
+
+    private void sendCurrentSettings(long chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(UserStorage.getUser(chatId).toString());
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

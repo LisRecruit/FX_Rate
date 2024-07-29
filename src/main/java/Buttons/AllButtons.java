@@ -107,8 +107,13 @@ public class AllButtons {
         button4.setCallbackData("notificationTime");
 
         InlineKeyboardButton button5 = new InlineKeyboardButton();
-        button5.setText("Назад");
-        button5.setCallbackData("backToWelcome");
+        button5.setText("Поточні налаштування");
+        button5.setCallbackData("currentSettings");
+
+        InlineKeyboardButton button6 = new InlineKeyboardButton();
+        button6.setText("Назад");
+        button6.setCallbackData("backToWelcome");
+
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(button1);
@@ -124,6 +129,8 @@ public class AllButtons {
 
         List<InlineKeyboardButton> row5 = new ArrayList<>();
         row5.add(button5);
+        List<InlineKeyboardButton> row6 = new ArrayList<>();
+        row5.add(button6);
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(row1);
@@ -131,6 +138,7 @@ public class AllButtons {
         keyboard.add(row3);
         keyboard.add(row4);
         keyboard.add(row5);
+        keyboard.add(row6);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         inlineKeyboardMarkup.setKeyboard(keyboard);
@@ -256,6 +264,7 @@ public class AllButtons {
             e.printStackTrace();
         }
     }
+
     private List<InlineKeyboardButton> createCurrenciesButtonRow(String text, Set<String> currentChoices, String callbackData) {
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(currentChoices != null && currentChoices.contains(callbackData) ? text + " ✅" : text);
@@ -298,7 +307,7 @@ public class AllButtons {
 
         List<InlineKeyboardButton> row4 = new ArrayList<>();
         row4.add(createNotificationButtons("18", currentChoice, "setNotification_18"));
-        row4.add(createNotificationButtons(UserStorage.getUser(chatId).isEnableNotifications()?"Вимкнути повідомлення":"Увімкнути повідомлення", currentChoice, "switch_notifications"));
+        row4.add(createNotificationButtons(UserStorage.getUser(chatId).isEnableNotifications() ? "Вимкнути повідомлення" : "Увімкнути повідомлення", currentChoice, "switch_notifications"));
 
 
         rows.add(row1);
@@ -323,8 +332,6 @@ public class AllButtons {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
-
 
 
     }

@@ -26,6 +26,7 @@ public abstract class Bank {
         in.close();
         return response.toString();
     }
+
     public static String formatAndRoundNumber(double number, int digitsAfterComs) {
         double scale = Math.pow(10, digitsAfterComs);
         double roundedNumber = Math.round(number * scale) / scale;
@@ -35,6 +36,7 @@ public abstract class Bank {
     }
 
     public abstract String getExchangeRates(boolean isUsd, boolean isEur, int digitsAfterComs) throws IOException;
+
     protected abstract String parseResponse(String jsonResponse, boolean isUsd, boolean isEur, int digitsAfterComs);
 }
 
