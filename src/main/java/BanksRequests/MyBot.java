@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class MyBot extends TelegramLongPollingBot {
     private final Map<Long, String> decimalChoices = new HashMap<>();
     private final Map<Long, String> bankChoices = new HashMap<>();
     private final Map<Long, Set<String>> currenciesChoices = new HashMap<>();
+    private final Map<Long, String> timeChoices = new HashMap<>();
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -34,7 +36,7 @@ public class MyBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
             String messageText = update.getMessage().getText();
             if ("/start".equals(messageText)) {
-                if (!UserStorage.containsUser(chatId)){
+                if (!UserStorage.containsUser(chatId)) {
                     User newUser = new User(chatId);
                     UserStorage.saveUser(newUser);
                 }
@@ -58,6 +60,7 @@ public class MyBot extends TelegramLongPollingBot {
         decimalChoices.putIfAbsent(chatId, "decimal_2");
         bankChoices.putIfAbsent(chatId, "bank_nbu");
         currenciesChoices.putIfAbsent(chatId, new HashSet<>(Set.of("currency_usd")));
+        timeChoices.putIfAbsent(chatId, "setNotification_9");
     }
 
     private void handleCallbackQuery(CallbackQuery callbackQuery) {
@@ -66,6 +69,11 @@ public class MyBot extends TelegramLongPollingBot {
         long chatId = callbackQuery.getMessage().getChatId();
         int messageId = callbackQuery.getMessage().getMessageId();
 
+        // Логирование для отладки
+        System.out.println("Callback Data: " + callbackData);
+        System.out.println("Chat ID: " + chatId);
+        System.out.println("Message ID: " + messageId);
+
 
         if (callbackData.startsWith("decimal_")) {
             decimalChoices.put(chatId, callbackData);
@@ -73,50 +81,81 @@ public class MyBot extends TelegramLongPollingBot {
         } else if (callbackData.startsWith("bank_")) {
             bankChoices.put(chatId, callbackData);
             allButtons.sendBank(chatId, messageId, this);
-        }  else if (callbackData.startsWith("currency_")) {
+        } else if (callbackData.startsWith("currency_")) {
             handleCurrencySelection(chatId, callbackData);
             allButtons.sendCurrencies(chatId, messageId, this);
-        } else {
-            switch (callbackData) {
-                case "info":
-                    allButtons.sendInformation(chatId, this);
-                    break;
-                case "settings_menu":
-                    allButtons.sendSettingsMenu(chatId, this);
-                    break;
-                case "numberOfDecimalPlaces":
-                    allButtons.sendNumberOfDecimalPlaces(chatId, messageId, this);
-                    break;
-                case "bank":
-                    allButtons.sendBank(chatId, messageId, this);
-                    break;
-                case "currencies":
-                    allButtons.sendCurrencies(chatId, messageId, this);
-                    break;
-                case "notificationTime":
-                    deleteMessage(chatId, messageId);
-                    allButtons.sendNotificationTime(chatId, this);
-                    break;
-                case "backToWelcome":
-                    deleteMessage(chatId, messageId);
-                    break;
-                case "backToSettings":
-                    deleteMessage(chatId, messageId);
-                    allButtons.sendSettingsMenu(chatId, this);
-                    break;
-                case "setNbu":
-                    UserStorage.getUser(chatId).setBank("nbu");
-                    System.out.println(UserStorage.getUser(chatId).getBank());
-                    break;
-                case "setPrivat24":
-                    UserStorage.getUser(chatId).setBank("privat24");
-                    System.out.println(UserStorage.getUser(chatId).getBank());
-                    break;
-                case "setMono_bank":
-                    UserStorage.getUser(chatId).setBank("mono");
-                    System.out.println(UserStorage.getUser(chatId).getBank());
-                    break;
-            }
+        } else if (callbackData.startsWith("setNotification_")) {
+            updateNotificationButtons(chatId, messageId, callbackData, this);
+            timeChoices.put(chatId, callbackData);
+            System.out.println("Time Choice Updated: " + callbackData);
+            String[] str = callbackData.toString().split("_");
+            LocalTime userNotificationTime = LocalTime.of(Integer.parseInt(str[1]), 00);
+            UserStorage.getUser(chatId).setUserNotificationTime(userNotificationTime);
+            System.out.println(UserStorage.getUser(chatId).getUserNotificationTime());
+        }
+
+        switch (callbackData) {
+            case "info":
+                allButtons.sendInformation(chatId, this);
+                break;
+            case "settings_menu":
+                deleteMessage(chatId, messageId);
+                allButtons.sendSettingsMenu(chatId, this);
+                break;
+            case "numberOfDecimalPlaces":
+                allButtons.sendNumberOfDecimalPlaces(chatId, messageId, this);
+                break;
+            case "bank":
+                allButtons.sendBank(chatId, messageId, this);
+                break;
+            case "currencies":
+                allButtons.sendCurrencies(chatId, messageId, this);
+                break;
+            case "notificationTime":
+//                    deleteMessage(chatId, messageId);
+                allButtons.sendNotificationTimeButton(chatId, messageId, this);
+                break;
+            case "backToWelcome":
+                deleteMessage(chatId, messageId);
+                allButtons.sendWelcomeMessage(chatId, this);
+                break;
+            case "backToSettings":
+                deleteMessage(chatId, messageId);
+                allButtons.sendSettingsMenu(chatId, this);
+                break;
+            case "bank_nbu":
+                UserStorage.getUser(chatId).setBank("nbu");
+                System.out.println(UserStorage.getUser(chatId).getBank());
+                break;
+            case "bank_privat":
+                UserStorage.getUser(chatId).setBank("privat24");
+                System.out.println(UserStorage.getUser(chatId).getBank());
+                break;
+            case "bank_mono":
+                UserStorage.getUser(chatId).setBank("mono");
+                System.out.println(UserStorage.getUser(chatId).getBank());
+                break;
+            case "currency_eur":
+                UserStorage.getUser(chatId).switchEur();
+                System.out.println(UserStorage.getUser(chatId).isEurEnable());
+                break;
+            case "currency_usd":
+                UserStorage.getUser(chatId).switchUsd();
+                System.out.println(UserStorage.getUser(chatId).isUsdEnable());
+                break;
+            case "decimal_2":
+                UserStorage.getUser(chatId).setDigitsAfterComs(2);
+                break;
+            case "decimal_3":
+                UserStorage.getUser(chatId).setDigitsAfterComs(3);
+                break;
+            case "decimal_4":
+                UserStorage.getUser(chatId).setDigitsAfterComs(4);
+                break;
+
+            case "switch_notifications":
+                UserStorage.getUser(chatId).switchNotification();
+                System.out.println("Notifications enabled "+UserStorage.getUser(chatId).isEnableNotifications());
         }
     }
 
@@ -129,42 +168,6 @@ public class MyBot extends TelegramLongPollingBot {
             execute(deleteMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
-
-//         switch (callbackData) {
-//             case "info":
-//                 allButtons.sendInformation(chatId, this);
-//                 break;
-//             case "settings_menu":
-//                 allButtons.sendSettingsMenu(chatId, this);
-//                 break;
-//             case "numberOfDecimalPlaces":
-//                 allButtons.sendNumberOfDecimalPlaces(chatId, this);
-//                 break;
-//             case "bank":
-//                 allButtons.sendBank(chatId, this);
-//                 break;
-//             case "currencies":
-//                 allButtons.sendCurrencies(chatId, this);
-//                 break;
-//             case "notificationTime":
-//                 allButtons.sendNotificationTimeButton(chatId, this);
-//                 break;
-//             case "back":
-//                 allButtons.sendWelcomeMessage(chatId, this);
-//                 break;
-//             case "setNbu":
-//                 UserStorage.getUser(chatId).setBank("nbu");
-//                 System.out.println(UserStorage.getUser(chatId).getBank());
-//                 break;
-//             case "setPrivat24":
-//                 UserStorage.getUser(chatId).setBank("privat24");
-//                 System.out.println(UserStorage.getUser(chatId).getBank());
-//                 break;
-//             case "setMono_bank":
-//                 UserStorage.getUser(chatId).setBank("mono");
-//                 System.out.println(UserStorage.getUser(chatId).getBank());
-//                 break;
-
         }
     }
 
@@ -176,9 +179,14 @@ public class MyBot extends TelegramLongPollingBot {
         return bankChoices;
     }
 
+    public Map<Long, String> getTimeChoices() {
+        return timeChoices;
+    }
+
     public Map<Long, Set<String>> getCurrenciesChoices() {
         return currenciesChoices;
     }
+
     private void handleCurrencySelection(long chatId, String callbackData) {
         Set<String> choices = currenciesChoices.getOrDefault(chatId, new HashSet<>());
         if (choices.contains(callbackData)) {
@@ -187,6 +195,11 @@ public class MyBot extends TelegramLongPollingBot {
             choices.add(callbackData);
         }
         currenciesChoices.put(chatId, choices);
+    }
+
+    private void updateNotificationButtons(long chatId, int messageId, String selectedTime, MyBot bot) {
+        timeChoices.put(chatId, selectedTime);
+        allButtons.sendNotificationTimeButton(chatId, messageId, bot);
     }
 
     @Override

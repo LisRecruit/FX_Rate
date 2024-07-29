@@ -14,14 +14,14 @@ public class User {
     }
 
     private final long chatId;
-    private String bank = "mono";
-    private int digitsAfterComs = 4;
+    private String bank = "nbu";
+    private int digitsAfterComs = 2;
     private boolean isUsd = true;
     private boolean isEur = false;
 
 
-    private boolean enableNotifications = true;
-    private LocalTime userNotificationTime = LocalTime.of(20, 11);
+    private boolean enableNotifications = false;
+    private LocalTime userNotificationTime = LocalTime.of(9, 00);
 
     public boolean isUsdEnable(){
         return isUsd;
@@ -80,6 +80,20 @@ public class User {
             this.setEnableNotifications(false);
         } else {
             this.setEnableNotifications(true);
+        }
+    }
+    public void switchEur () {
+        if (this.isEur == true) {
+            this.setEur(false);
+        } else {
+            this.setEur(true);
+        }
+    }
+    public void switchUsd () {
+        if (this.isUsd == true) {
+            this.setUsd(false);
+        } else {
+            this.setUsd(true);
         }
     }
 

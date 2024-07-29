@@ -154,20 +154,6 @@ public class AllButtons {
         message.setMessageId(messageId);
         message.setText("Оберіть кількість знаків після коми:");
 
-//     public void sendNumberOfDecimalPlaces(long chatId, MyBot bot) {
-//         InlineKeyboardButton button1 = new InlineKeyboardButton();
-//         button1.setText("2");
-//         button1.setCallbackData("set 2 digits after coma");
-
-//         InlineKeyboardButton button2 = new InlineKeyboardButton();
-//         button2.setText("3");
-//         button2.setCallbackData("set 3 digits after coma");
-
-//         InlineKeyboardButton button3 = new InlineKeyboardButton();
-//         button3.setText("4");
-//         button3.setCallbackData("set 4 digits after coma");
-
-
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
 
@@ -239,16 +225,6 @@ public class AllButtons {
         return row;
     }
 
-    public void sendCurrencies(long chatId, MyBot bot) {
-        InlineKeyboardButton button1 = new InlineKeyboardButton();
-        button1.setText("USD");
-        button1.setCallbackData("setusd");
-
-        InlineKeyboardButton button2 = new InlineKeyboardButton();
-        button2.setText("EUR");
-        button2.setCallbackData("seteur");
-
-
     public void sendCurrencies(long chatId, int messageId, MyBot bot) {
         EditMessageText message = new EditMessageText();
         message.setChatId(chatId);
@@ -290,45 +266,46 @@ public class AllButtons {
         return row;
     }
 
-    public void sendNotificationTimeButton(long chatId, MyBot bot) {
+    public void sendNotificationTimeButton(long chatId, int messageId, MyBot bot) {
 
-        SendMessage message = new SendMessage();
+        System.out.println("Attempting to edit message with ID: " + messageId + " in chat: " + chatId);
+
+        EditMessageText message = new EditMessageText();
         message.setChatId(chatId);
-        message.setText("Оберіть час оповіщень");
-
-        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-        keyboardMarkup.setResizeKeyboard(true);
-
-        List<KeyboardRow> keyboard = new ArrayList<>();
-
-        KeyboardRow row1 = new KeyboardRow();
-        row1.add(new KeyboardButton("9"));
-        row1.add(new KeyboardButton("10"));
-        row1.add(new KeyboardButton("11"));
-        keyboard.add(row1);
-
-        KeyboardRow row2 = new KeyboardRow();
-        row2.add(new KeyboardButton("12"));
-        row2.add(new KeyboardButton("13"));
-        row2.add(new KeyboardButton("14"));
-        keyboard.add(row2);
-
-        KeyboardRow row3 = new KeyboardRow();
-        row3.add(new KeyboardButton("15"));
-        row3.add(new KeyboardButton("16"));
-        row3.add(new KeyboardButton("17"));
-        keyboard.add(row3);
-
-        KeyboardRow row4 = new KeyboardRow();
-        row4.add(new KeyboardButton("18"));
-        row4.add(new KeyboardButton("Вимкнути повідомлення"));
-        keyboard.add(row4);
-
-        keyboardMarkup.setKeyboard(keyboard);
-        message.setReplyMarkup(keyboardMarkup);
+        message.setMessageId(messageId);
+        message.setText("О  котрій годині Вам надсилати актуальні курси?");
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+
+        String currentChoice = bot.getTimeChoices().get(chatId);
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+
+        row1.add(createNotificationButtons("9", currentChoice, "setNotification_9"));
+        row1.add(createNotificationButtons("10", currentChoice, "setNotification_10"));
+        row1.add(createNotificationButtons("11", currentChoice, "setNotification_11"));
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(createNotificationButtons("12", currentChoice, "setNotification_12"));
+        row2.add(createNotificationButtons("13", currentChoice, "setNotification_13"));
+        row2.add(createNotificationButtons("14", currentChoice, "setNotification_14"));
+
+        List<InlineKeyboardButton> row3 = new ArrayList<>();
+        row3.add(createNotificationButtons("15", currentChoice, "setNotification_15"));
+        row3.add(createNotificationButtons("16", currentChoice, "setNotification_16"));
+        row3.add(createNotificationButtons("17", currentChoice, "setNotification_17"));
+
+        List<InlineKeyboardButton> row4 = new ArrayList<>();
+        row4.add(createNotificationButtons("18", currentChoice, "setNotification_18"));
+        row4.add(createNotificationButtons(UserStorage.getUser(chatId).isEnableNotifications()?"Вимкнути повідомлення":"Увімкнути повідомлення", currentChoice, "switch_notifications"));
+
+
+        rows.add(row1);
+        rows.add(row2);
+        rows.add(row3);
+        rows.add(row4);
+
 
         InlineKeyboardButton backButton = new InlineKeyboardButton();
         backButton.setText("Назад до налаштувань");
@@ -346,5 +323,18 @@ public class AllButtons {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
+
+
+
     }
+
+    private InlineKeyboardButton createNotificationButtons(String text, String currentChoice, String callbackData) {
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(currentChoice != null && currentChoice.equals(callbackData) ? text + " ✅" : text);
+        button.setCallbackData(callbackData);
+        return button;
+    }
+
+
 }
