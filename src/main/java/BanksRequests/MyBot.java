@@ -3,7 +3,7 @@ package BanksRequests;
 import BotUtils.UserStorage;
 import BotUtils.User;
 import Buttons.AllButtons;
-
+import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -224,11 +224,11 @@ public class MyBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "FX_RateBot";
+        return System.getenv("BOT_NAME");
     }
 
     @Override
     public String getBotToken() {
-        return "6792941997:AAGEJjcgCzy-C-X6hA56ORT74LAvQGNMkiI";
+        return System.getenv("BOT_TOKEN");
     }
 }
