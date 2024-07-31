@@ -58,18 +58,7 @@ public class AllButtons {
     }
 
     public void sendInformation(long chatId, MyBot bot) {
-//        InlineKeyboardButton button = new InlineKeyboardButton();
-//        button.setText("Назад");
-//        button.setCallbackData("backToWelcome");
-//
-//        List<InlineKeyboardButton> row = new ArrayList<>();
-//        row.add(button);
-//
-//        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-//        keyboard.add(row);
-//
-//        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-//        inlineKeyboardMarkup.setKeyboard(keyboard);
+
 
         SendMessage message = new SendMessage();
         GettingExchangeRates bankRates = new GettingExchangeRates();
@@ -80,7 +69,7 @@ public class AllButtons {
             e.printStackTrace();
             message.setText("Не вдалося отримати курси валют");
         }
-//        message.setReplyMarkup(inlineKeyboardMarkup);
+
 
         try {
             bot.execute(message);
