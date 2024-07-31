@@ -58,18 +58,18 @@ public class AllButtons {
     }
 
     public void sendInformation(long chatId, MyBot bot) {
-        InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText("Назад");
-        button.setCallbackData("backToWelcome");
-
-        List<InlineKeyboardButton> row = new ArrayList<>();
-        row.add(button);
-
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(row);
-
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        inlineKeyboardMarkup.setKeyboard(keyboard);
+//        InlineKeyboardButton button = new InlineKeyboardButton();
+//        button.setText("Назад");
+//        button.setCallbackData("backToWelcome");
+//
+//        List<InlineKeyboardButton> row = new ArrayList<>();
+//        row.add(button);
+//
+//        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+//        keyboard.add(row);
+//
+//        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+//        inlineKeyboardMarkup.setKeyboard(keyboard);
 
         SendMessage message = new SendMessage();
         GettingExchangeRates bankRates = new GettingExchangeRates();
@@ -80,7 +80,7 @@ public class AllButtons {
             e.printStackTrace();
             message.setText("Не вдалося отримати курси валют");
         }
-        message.setReplyMarkup(inlineKeyboardMarkup);
+//        message.setReplyMarkup(inlineKeyboardMarkup);
 
         try {
             bot.execute(message);
@@ -307,7 +307,7 @@ public class AllButtons {
 
         List<InlineKeyboardButton> row4 = new ArrayList<>();
         row4.add(createNotificationButtons("18", currentChoice, "setNotification_18"));
-        row4.add(createNotificationButtons(UserStorage.getUser(chatId).isEnableNotifications() ? "Вимкнути повідомлення" : "Увімкнути повідомлення", currentChoice, "switch_notifications"));
+        row4.add(createSwitchNotificationButton(chatId, currentChoice, "switch_notifications"));
 
 
         rows.add(row1);
@@ -339,6 +339,13 @@ public class AllButtons {
     private InlineKeyboardButton createNotificationButtons(String text, String currentChoice, String callbackData) {
         InlineKeyboardButton button = new InlineKeyboardButton();
         button.setText(currentChoice != null && currentChoice.equals(callbackData) ? text + " ✅" : text);
+        button.setCallbackData(callbackData);
+        return button;
+    }
+
+    private InlineKeyboardButton createSwitchNotificationButton(long chatId, String currentChoice, String callbackData) {
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText(UserStorage.getUser(chatId).isEnableNotifications() ? "Вимкнути повідомлення" : "Увімкнути повідомлення");
         button.setCallbackData(callbackData);
         return button;
     }

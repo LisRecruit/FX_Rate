@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.0'
 }
 
 group = 'org.example'
@@ -23,4 +24,11 @@ tasks.withType(JavaCompile) {
 
 test {
     useJUnitPlatform()
+}
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'AppLauncher'
+        )
+    }
 }

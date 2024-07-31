@@ -111,6 +111,7 @@ public class User {
                 break;
             case "mono":
                 builder.append("Моно");
+                break;
             case "privat24":
                 builder.append("Приват Банк");
                 break;
